@@ -48,7 +48,7 @@ func (o Opensea) getPath(ctx context.Context, path string) ([]byte, error) {
 
 func (o Opensea) getURL(ctx context.Context, url string) ([]byte, error) {
 	client := new(http.Client)
-	fmt.Println(url)
+	// fmt.Println(url)
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
 	req.Header.Add("X-API-KEY", o.APIKey)
 	resp, err := client.Do(req)
@@ -61,9 +61,9 @@ func (o Opensea) getURL(ctx context.Context, url string) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	// if resp.StatusCode != http.StatusOK {
-	// 	return nil, fmt.Errorf("Backend returns status %d msg: %s", resp.StatusCode, string(body))
-	// }
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("Backend returns status %d msg: %s", resp.StatusCode, string(body))
+	}
 
 	// // If it returns array, not an error
 	// if string(body[0]) != "[" {
