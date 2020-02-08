@@ -10,8 +10,8 @@ import (
 )
 
 var (
-	MainnetAPI = "https://api.opensea.io/api/v1/"
-	RinkebyAPI = "https://rinkeby-api.opensea.io/api/v1/"
+	mainnetAPI = "https://api.opensea.io/api/v1/"
+	rinkebyAPI = "https://rinkeby-api.opensea.io/api/v1/"
 )
 
 type Opensea struct {
@@ -21,7 +21,15 @@ type Opensea struct {
 
 func NewOpensea(apiKey string) (*Opensea, error) {
 	o := &Opensea{
-		API:    MainnetAPI,
+		API:    mainnetAPI,
+		APIKey: apiKey,
+	}
+	return o, nil
+}
+
+func NewOpenseaRinkeby(apiKey string) (*Opensea, error) {
+	o := &Opensea{
+		API:    rinkebyAPI,
 		APIKey: apiKey,
 	}
 	return o, nil
