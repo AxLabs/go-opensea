@@ -6,7 +6,9 @@ import (
 	"fmt"
 	"io/ioutil"
 	"math/big"
+	"net"
 	"net/http"
+	"time"
 )
 
 var (
@@ -55,7 +57,7 @@ func (o Opensea) getPath(ctx context.Context, path string) ([]byte, error) {
 }
 
 func (o Opensea) getURL(ctx context.Context, url string) ([]byte, error) {
-	client := new(http.Client)
+	client := httpClient()
 	// fmt.Println(url)
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
 	req.Header.Add("X-API-KEY", o.APIKey)
@@ -73,17 +75,26 @@ func (o Opensea) getURL(ctx context.Context, url string) ([]byte, error) {
 		return nil, fmt.Errorf("Backend returns status %d msg: %s", resp.StatusCode, string(body))
 	}
 
-	// // If it returns array, not an error
-	// if string(body[0]) != "[" {
-	// 	e := new(errorResponse)
-	// 	err = json.Unmarshal(body, e)
-	// 	if err != nil {
-	// 		return nil, err
-	// 	}
-	// 	if e.Body != nil {
-	// 		return nil, e.Error()
-	// 	}
-	// }
-
 	return body, nil
+}
+
+func httpClient() *http.Client {
+	client := new(http.Client)
+	var transport http.RoundTripper = &http.Transport{
+		Proxy:              http.ProxyFromEnvironment,
+		DisableKeepAlives:  false,
+		DisableCompression: false,
+		DialContext: (&net.Dialer{
+			Timeout:   30 * time.Second,
+			KeepAlive: 300 * time.Second,
+			DualStack: true,
+		}).DialContext,
+		ForceAttemptHTTP2:     true,
+		MaxIdleConns:          100,
+		IdleConnTimeout:       90 * time.Second,
+		TLSHandshakeTimeout:   5 * time.Second,
+		ExpectContinueTimeout: 1 * time.Second,
+	}
+	client.Transport = transport
+	return client
 }
