@@ -12,13 +12,21 @@ import (
 )
 
 var (
-	mainnetAPI = "https://api.opensea.io/api/v1/"
-	rinkebyAPI = "https://rinkeby-api.opensea.io/api/v1/"
+	mainnetAPI = "https://api.opensea.io"
+	rinkebyAPI = "https://rinkeby-api.opensea.io"
 )
 
 type Opensea struct {
 	API    string
 	APIKey string
+}
+
+type errorResponse struct {
+	Success bool `json:"success"`
+}
+
+func (e errorResponse) Error() string {
+	return "Not success"
 }
 
 func NewOpensea(apiKey string) (*Opensea, error) {
@@ -43,7 +51,7 @@ func (o Opensea) GetSingleAsset(assetContractAddress string, tokenID *big.Int) (
 }
 
 func (o Opensea) GetSingleAssetWithContext(ctx context.Context, assetContractAddress string, tokenID *big.Int) (*Asset, error) {
-	path := fmt.Sprintf("asset/%s/%s", assetContractAddress, tokenID.String())
+	path := fmt.Sprintf("/api/v1/asset/%s/%s", assetContractAddress, tokenID.String())
 	b, err := o.getPath(ctx, path)
 	if err != nil {
 		return nil, err
@@ -58,9 +66,10 @@ func (o Opensea) getPath(ctx context.Context, path string) ([]byte, error) {
 
 func (o Opensea) getURL(ctx context.Context, url string) ([]byte, error) {
 	client := httpClient()
-	// fmt.Println(url)
+	fmt.Println(url)
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
 	req.Header.Add("X-API-KEY", o.APIKey)
+	req.Header.Add("Accept", "application/json")
 	resp, err := client.Do(req)
 	if err != nil {
 		return nil, err
@@ -71,7 +80,17 @@ func (o Opensea) getURL(ctx context.Context, url string) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	if resp.StatusCode != http.StatusOK {
+		e := new(errorResponse)
+		err = json.Unmarshal(body, e)
+		if err != nil {
+			return nil, err
+		}
+		if !e.Success {
+			return nil, e
+		}
+
 		return nil, fmt.Errorf("Backend returns status %d msg: %s", resp.StatusCode, string(body))
 	}
 

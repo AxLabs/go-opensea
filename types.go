@@ -1,6 +1,8 @@
 package opensea
 
-import "encoding/json"
+import (
+	"encoding/json"
+)
 
 type Asset struct {
 	TokenID          string  `json:"token_id"`
