@@ -21,8 +21,8 @@ type Order struct {
 	// OrderHash            string               `json:"order_hash"`
 	// Metadata Metadata `json:"metadata"`
 	Exchange     Address `json:"exchange"`
-	Maker        *User   `json:"maker"`
-	Taker        *User   `json:"taker"`
+	Maker        Account `json:"maker"`
+	Taker        Account `json:"taker"`
 	CurrentPrice string  `json:"current_price"`
 	// CurrentBounty        string               `json:"current_bounty"`
 	// BountyMultiple       string               `json:"bounty_multiple"`
@@ -33,8 +33,8 @@ type Order struct {
 	// MakerReferrerFee     string               `json:"maker_referrer_fee"`
 	// FeeRecipient         FeeRecipient         `json:"fee_recipient"`
 	// FeeMethod            int64                `json:"fee_method"`
-	Side Side `json:"side"` // 0 for buy orders and 1 for sell orders.
-	// SaleKind             int64                `json:"sale_kind"`
+	Side     Side     `json:"side"` // 0 for buy orders and 1 for sell orders.
+	SaleKind SaleKind `json:"sale_kind"`
 	// Target               Target               `json:"target"`
 	// HowToCall            int64                `json:"how_to_call"`
 	// Calldata             string               `json:"calldata"`
@@ -50,11 +50,18 @@ type Order struct {
 	// V                    int64                `json:"v"`
 	// R                    string               `json:"r"`
 	// S                    string               `json:"s"`
-	// ApprovedOnChain      bool                 `json:"approved_on_chain"`
-	// Cancelled            bool                 `json:"cancelled"`
-	// Finalized            bool                 `json:"finalized"`
-	// MarkedInvalid        bool                 `json:"marked_invalid"`
+	ApprovedOnChain bool `json:"approved_on_chain"`
+	Cancelled       bool `json:"cancelled"`
+	Finalized       bool `json:"finalized"`
+	MarkedInvalid   bool `json:"marked_invalid"`
 	// PrefixedHash         string               `json:"prefixed_hash"`
+}
+
+func (o Order) IsPrivate() bool {
+	if o.Taker.Address != NullAddress {
+		return true
+	}
+	return false
 }
 
 type Side int
@@ -62,6 +69,13 @@ type Side int
 const (
 	Buy  Side = 0
 	Sell Side = 1
+)
+
+type SaleKind int
+
+const (
+	FixedOrMinBit SaleKind = 0 // 0 for fixed-price sales or min-bid auctions
+	DutchAuctions SaleKind = 1 // 1 for declining-price Dutch Auctions
 )
 
 type TimeNano time.Time

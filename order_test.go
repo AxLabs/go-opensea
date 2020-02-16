@@ -15,4 +15,5 @@ func TestGetOrders(t *testing.T) {
 	print(len(ret))
 
 	print(*ret[0])
+	print(ret[0].IsPrivate())
 }
