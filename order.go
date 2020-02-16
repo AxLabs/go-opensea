@@ -36,7 +36,7 @@ type Order struct {
 	Side     Side     `json:"side"` // 0 for buy orders and 1 for sell orders.
 	SaleKind SaleKind `json:"sale_kind"`
 	// Target               Target               `json:"target"`
-	// HowToCall            int64                `json:"how_to_call"`
+	HowToCall HowToCall `json:"how_to_call"`
 	// Calldata             string               `json:"calldata"`
 	// ReplacementPattern   string               `json:"replacement_pattern"`
 	// StaticTarget         PaymentToken         `json:"static_target"`
@@ -47,7 +47,7 @@ type Order struct {
 	// Extra                string               `json:"extra"`
 	// Quantity             string               `json:"quantity"`
 	// Salt                 string               `json:"salt"`
-	// V                    int64                `json:"v"`
+	V uint8 `json:"v"`
 	// R                    string               `json:"r"`
 	// S                    string               `json:"s"`
 	ApprovedOnChain bool `json:"approved_on_chain"`
@@ -64,18 +64,32 @@ func (o Order) IsPrivate() bool {
 	return false
 }
 
-type Side int
+type Side uint8
 
 const (
-	Buy  Side = 0
-	Sell Side = 1
+	Buy Side = iota
+	Sell
 )
 
-type SaleKind int
+type SaleKind uint8
 
 const (
-	FixedOrMinBit SaleKind = 0 // 0 for fixed-price sales or min-bid auctions
-	DutchAuctions SaleKind = 1 // 1 for declining-price Dutch Auctions
+	FixedOrMinBit SaleKind = iota // 0 for fixed-price sales or min-bid auctions
+	DutchAuctions                 // 1 for declining-price Dutch Auctions
+)
+
+type HowToCall uint8
+
+const (
+	Call HowToCall = iota
+	DelegateCall
+)
+
+type FeeMethod uint8
+
+const (
+	ProtocolFee FeeMethod = iota
+	SplitFee
 )
 
 type TimeNano time.Time
