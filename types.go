@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 )
 
+type Address string
+
 type Asset struct {
 	TokenID          string  `json:"token_id"`
 	ImageURL         string  `json:"image_url"`
@@ -11,20 +13,20 @@ type Asset struct {
 	Name             string  `json:"name"`
 	Description      string  `json:"description"`
 	ExternalLink     string  `json:"external_link"`
-	Owner            Owner   `json:"owner"`
+	Owner            User    `json:"owner"`
 	Permalink        string  `json:"permalink"`
 	Traits           []Trait `json:"traits"`
 }
 
-type Owner struct {
-	User          User   `json:"user"`
-	ProfileImgURL string `json:"profile_img_url"`
-	Address       string `json:"address"`
-	Config        string `json:"config"`
-	DiscordID     string `json:"discord_id"`
+type User struct {
+	User          UserInfo `json:"user"`
+	ProfileImgURL string   `json:"profile_img_url"`
+	Address       Address  `json:"address"`
+	Config        string   `json:"config"`
+	DiscordID     string   `json:"discord_id"`
 }
 
-type User struct {
+type UserInfo struct {
 	Username string `json:"username"`
 }
 
