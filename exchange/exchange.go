@@ -2,6 +2,7 @@ package exchange
 
 import (
 	"math/big"
+	"time"
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
@@ -22,10 +23,10 @@ type Order struct {
 	Exchange           common.Address
 	Maker              common.Address
 	Taker              common.Address
-	MakerRelayerFee    int64
-	TakerRelayerFee    int64
-	MakerProtocolFee   int64
-	TakerProtocolFee   int64
+	MakerRelayerFee    *big.Int
+	TakerRelayerFee    *big.Int
+	MakerProtocolFee   *big.Int
+	TakerProtocolFee   *big.Int
 	FeeRecipient       common.Address
 	FeeMethod          opensea.FeeMethod
 	Side               opensea.Side
@@ -37,17 +38,86 @@ type Order struct {
 	StaticTarget       common.Address
 	StaticExtradata    []byte
 	PaymentToken       common.Address
-	BasePrice          int64
-	Extra              int64
-	ListingTime        int64
-	ExpirationTime     int64
-	Salt               int64
+	BasePrice          *big.Int
+	Extra              *big.Int
+	ListingTime        *big.Int
+	ExpirationTime     *big.Int
+	Salt               *big.Int
 }
 
 type Sig struct {
 	V uint8
 	R [32]byte
 	S [32]byte
+}
+
+func toAddress(a opensea.Address) common.Address {
+	return common.HexToAddress(string(a))
+}
+
+func Generate(opts *bind.TransactOpts, in *opensea.Order) (buy *Order, buySig *Sig, sell *Order, sellSig *Sig, metadata [32]byte, err error) {
+	buy = &Order{
+		toAddress(in.Exchange),
+		opts.From,
+		toAddress(in.Maker.Address),
+		in.TakerRelayerFee.Big(),
+		in.MakerRelayerFee.Big(),
+		in.TakerProtocolFee.Big(),
+		in.MakerProtocolFee.Big(),
+		toAddress(in.FeeRecipient.Address),
+		in.FeeMethod,
+		opensea.Buy,
+		in.SaleKind,
+		toAddress(in.Target),
+		in.HowToCall,
+		[]byte{}, // todo
+		[]byte{}, // todo
+		toAddress(in.StaticTarget),
+		[]byte(in.StaticExtradata),
+		toAddress(in.PaymentToken),
+		in.Extra.Big(),
+		in.BasePrice.Big(),
+		big.NewInt(time.Now().Unix()),
+		big.NewInt(0),
+		big.NewInt(0), // todo
+	}
+	sell = &Order{
+		toAddress(in.Exchange),
+		toAddress(in.Maker.Address),
+		opts.From,
+		in.MakerRelayerFee.Big(),
+		in.TakerRelayerFee.Big(),
+		in.MakerProtocolFee.Big(),
+		in.TakerProtocolFee.Big(),
+		toAddress(in.FeeRecipient.Address),
+		in.FeeMethod,
+		opensea.Sell,
+		in.SaleKind,
+		toAddress(in.Target),
+		in.HowToCall,
+		in.Calldata,
+		in.ReplacementPattern,
+		toAddress(in.StaticTarget),
+		[]byte(in.StaticExtradata),
+		toAddress(in.PaymentToken),
+		in.Extra.Big(),
+		in.BasePrice.Big(),
+		big.NewInt(in.ListingTime),
+		big.NewInt(in.ExpirationTime),
+		in.Salt.Big(),
+	}
+	buySig = &Sig{
+		in.V,
+		in.R.Bytes32(),
+		in.S.Bytes32(),
+	}
+	sellSig = &Sig{
+		in.V,
+		in.R.Bytes32(),
+		in.S.Bytes32(),
+	}
+	metadata = [32]byte{}
+	return
 }
 
 func NewExchange(rpc string, exchangeAddress string) (*Exchange, error) {
@@ -89,24 +159,24 @@ func (e Exchange) AtomicMatch(opts *bind.TransactOpts, buy *Order, buySig *Sig, 
 	}
 
 	uints := [18]*big.Int{
-		big.NewInt(buy.MakerRelayerFee),
-		big.NewInt(buy.TakerRelayerFee),
-		big.NewInt(buy.MakerProtocolFee),
-		big.NewInt(buy.TakerProtocolFee),
-		big.NewInt(buy.BasePrice),
-		big.NewInt(buy.Extra),
-		big.NewInt(buy.ListingTime),
-		big.NewInt(buy.ExpirationTime),
-		big.NewInt(buy.Salt),
-		big.NewInt(sell.MakerRelayerFee),
-		big.NewInt(sell.TakerRelayerFee),
-		big.NewInt(sell.MakerProtocolFee),
-		big.NewInt(sell.TakerProtocolFee),
-		big.NewInt(sell.BasePrice),
-		big.NewInt(sell.Extra),
-		big.NewInt(sell.ListingTime),
-		big.NewInt(sell.ExpirationTime),
-		big.NewInt(sell.Salt),
+		buy.MakerRelayerFee,
+		buy.TakerRelayerFee,
+		buy.MakerProtocolFee,
+		buy.TakerProtocolFee,
+		buy.BasePrice,
+		buy.Extra,
+		buy.ListingTime,
+		buy.ExpirationTime,
+		buy.Salt,
+		sell.MakerRelayerFee,
+		sell.TakerRelayerFee,
+		sell.MakerProtocolFee,
+		sell.TakerProtocolFee,
+		sell.BasePrice,
+		sell.Extra,
+		sell.ListingTime,
+		sell.ExpirationTime,
+		sell.Salt,
 	}
 
 	feeMethodsSidesKindsHowToCalls := [8]uint8{
@@ -126,6 +196,7 @@ func (e Exchange) AtomicMatch(opts *bind.TransactOpts, buy *Order, buySig *Sig, 
 	replacementPatternSell := sell.ReplacementPattern
 	staticExtradataBuy := buy.StaticExtradata
 	staticExtradataSell := sell.StaticExtradata
+
 	vs := [2]uint8{
 		buySig.V,
 		sellSig.V,

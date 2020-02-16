@@ -16,44 +16,44 @@ type Order struct {
 	CreatedDate *TimeNano `json:"created_date"`
 	ClosingDate *TimeNano `json:"closing_date"`
 	// ClosingExtendable    bool                 `json:"closing_extendable"`
-	// ExpirationTime       int64                `json:"expiration_time"`
-	// ListingTime          int64                `json:"listing_time"`
+	ExpirationTime int64 `json:"expiration_time"`
+	ListingTime    int64 `json:"listing_time"`
 	// OrderHash            string               `json:"order_hash"`
 	// Metadata Metadata `json:"metadata"`
 	Exchange     Address `json:"exchange"`
 	Maker        Account `json:"maker"`
 	Taker        Account `json:"taker"`
-	CurrentPrice string  `json:"current_price"`
+	CurrentPrice Number  `json:"current_price"`
 	// CurrentBounty        string               `json:"current_bounty"`
 	// BountyMultiple       string               `json:"bounty_multiple"`
-	// MakerRelayerFee      string               `json:"maker_relayer_fee"`
-	// TakerRelayerFee      string               `json:"taker_relayer_fee"`
-	// MakerProtocolFee     string               `json:"maker_protocol_fee"`
-	// TakerProtocolFee     string               `json:"taker_protocol_fee"`
-	// MakerReferrerFee     string               `json:"maker_referrer_fee"`
-	// FeeRecipient         FeeRecipient         `json:"fee_recipient"`
-	// FeeMethod            int64                `json:"fee_method"`
-	Side     Side     `json:"side"` // 0 for buy orders and 1 for sell orders.
-	SaleKind SaleKind `json:"sale_kind"`
-	// Target               Target               `json:"target"`
-	HowToCall HowToCall `json:"how_to_call"`
-	// Calldata             string               `json:"calldata"`
-	// ReplacementPattern   string               `json:"replacement_pattern"`
-	// StaticTarget         PaymentToken         `json:"static_target"`
-	// StaticExtradata      StaticExtradata      `json:"static_extradata"`
-	PaymentToken Address `json:"payment_token"`
+	MakerRelayerFee    Number    `json:"maker_relayer_fee"`
+	TakerRelayerFee    Number    `json:"taker_relayer_fee"`
+	MakerProtocolFee   Number    `json:"maker_protocol_fee"`
+	TakerProtocolFee   Number    `json:"taker_protocol_fee"`
+	MakerReferrerFee   Number    `json:"maker_referrer_fee"`
+	FeeRecipient       Account   `json:"fee_recipient"`
+	FeeMethod          FeeMethod `json:"fee_method"`
+	Side               Side      `json:"side"` // 0 for buy orders and 1 for sell orders.
+	SaleKind           SaleKind  `json:"sale_kind"`
+	Target             Address   `json:"target"`
+	HowToCall          HowToCall `json:"how_to_call"`
+	Calldata           Bytes     `json:"calldata"`
+	ReplacementPattern Bytes     `json:"replacement_pattern"`
+	StaticTarget       Address   `json:"static_target"`
+	StaticExtradata    Bytes     `json:"static_extradata"`
+	PaymentToken       Address   `json:"payment_token"`
 	// PaymentTokenContract PaymentTokenContract `json:"payment_token_contract"`
-	// BasePrice            string               `json:"base_price"`
-	// Extra                string               `json:"extra"`
-	// Quantity             string               `json:"quantity"`
-	// Salt                 string               `json:"salt"`
-	V uint8 `json:"v"`
-	// R                    string               `json:"r"`
-	// S                    string               `json:"s"`
-	ApprovedOnChain bool `json:"approved_on_chain"`
-	Cancelled       bool `json:"cancelled"`
-	Finalized       bool `json:"finalized"`
-	MarkedInvalid   bool `json:"marked_invalid"`
+	BasePrice       Number `json:"base_price"`
+	Extra           Number `json:"extra"`
+	Quantity        string `json:"quantity"`
+	Salt            Number `json:"salt"`
+	V               uint8  `json:"v"`
+	R               Bytes  `json:"r"`
+	S               Bytes  `json:"s"`
+	ApprovedOnChain bool   `json:"approved_on_chain"`
+	Cancelled       bool   `json:"cancelled"`
+	Finalized       bool   `json:"finalized"`
+	MarkedInvalid   bool   `json:"marked_invalid"`
 	// PrefixedHash         string               `json:"prefixed_hash"`
 }
 

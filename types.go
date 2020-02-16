@@ -1,12 +1,47 @@
 package opensea
 
 import (
+	"encoding/hex"
 	"encoding/json"
+	"math/big"
+	"strconv"
 )
+
+type Number string
+
+func (n Number) Big() *big.Int {
+	r, _ := new(big.Int).SetString(string(n), 10)
+	return r
+}
 
 type Address string
 
 const NullAddress Address = "0x0000000000000000000000000000000000000000"
+
+type Bytes []byte
+
+func (by Bytes) Bytes32() [32]byte {
+	var ret [32]byte
+	copy(ret[:], by[0:32])
+	return ret
+}
+
+func (by *Bytes) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	s = s[2:]
+	*by, err = hex.DecodeString(s)
+	return err
+}
+
+func (by Bytes) MarshalJSON() ([]byte, error) {
+	s := hex.EncodeToString([]byte(by))
+	s = "0x" + s
+	s = strconv.Quote(s)
+	return []byte(s), nil
+}
 
 type Asset struct {
 	TokenID          string  `json:"token_id"`

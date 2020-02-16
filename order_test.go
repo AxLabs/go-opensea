@@ -16,4 +16,5 @@ func TestGetOrders(t *testing.T) {
 
 	print(*ret[0])
 	print(ret[0].IsPrivate())
+	print(ret[0].BasePrice.Big())
 }
