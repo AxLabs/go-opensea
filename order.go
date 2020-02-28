@@ -15,7 +15,7 @@ type Order struct {
 	// AssetBundle          interface{}          `json:"asset_bundle"`
 	CreatedDate *TimeNano `json:"created_date"`
 	ClosingDate *TimeNano `json:"closing_date"`
-	// ClosingExtendable    bool                 `json:"closing_extendable"`
+	// ClosingExtendable bool      `json:"closing_extendable"`
 	ExpirationTime int64 `json:"expiration_time"`
 	ListingTime    int64 `json:"listing_time"`
 	// OrderHash            string               `json:"order_hash"`
@@ -47,9 +47,9 @@ type Order struct {
 	Extra           Number `json:"extra"`
 	Quantity        string `json:"quantity"`
 	Salt            Number `json:"salt"`
-	V               uint8  `json:"v"`
-	R               Bytes  `json:"r"`
-	S               Bytes  `json:"s"`
+	V               *uint8 `json:"v"`
+	R               *Bytes `json:"r"`
+	S               *Bytes `json:"s"`
 	ApprovedOnChain bool   `json:"approved_on_chain"`
 	Cancelled       bool   `json:"cancelled"`
 	Finalized       bool   `json:"finalized"`
@@ -103,7 +103,13 @@ func (t *TimeNano) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	tt, err := time.Parse("2006-01-02T15:04:05.999999", s)
+	tt := time.Time{}
+	tt, err = time.Parse("2006-01-02T15:04:05.999999", s)
+	// if strings.Contains(s, ".") {
+	// 	tt, err = time.Parse("2006-01-02T15:04:05.999999", s)
+	// } else {
+	// 	tt, err = time.Parse("2006-01-02T15:04:05", s)
+	// }
 	if err != nil {
 		return err
 	}

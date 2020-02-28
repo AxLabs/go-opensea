@@ -66,7 +66,7 @@ func (o Opensea) getPath(ctx context.Context, path string) ([]byte, error) {
 
 func (o Opensea) getURL(ctx context.Context, url string) ([]byte, error) {
 	client := httpClient()
-	fmt.Println(url)
+	// fmt.Println(url)
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
 	req.Header.Add("X-API-KEY", o.APIKey)
 	req.Header.Add("Accept", "application/json")

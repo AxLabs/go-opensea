@@ -5,12 +5,14 @@ import (
 	"encoding/json"
 	"math/big"
 	"strconv"
+	"strings"
 )
 
 type Number string
 
 func (n Number) Big() *big.Int {
-	r, _ := new(big.Int).SetString(string(n), 10)
+	s := strings.Split(string(n), ".")
+	r, _ := new(big.Int).SetString(s[0], 10)
 	return r
 }
 
@@ -30,6 +32,10 @@ func (by *Bytes) UnmarshalJSON(b []byte) error {
 	s, err := strconv.Unquote(string(b))
 	if err != nil {
 		return err
+	}
+	if len(s) == 0 {
+		*by = []byte{}
+		return nil
 	}
 	s = s[2:]
 	*by, err = hex.DecodeString(s)
