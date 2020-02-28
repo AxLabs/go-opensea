@@ -5,8 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/url"
-	"strconv"
-	"time"
 )
 
 type Order struct {
@@ -91,37 +89,6 @@ const (
 	ProtocolFee FeeMethod = iota
 	SplitFee
 )
-
-type TimeNano time.Time
-
-func (t TimeNano) Time() time.Time {
-	return time.Time(t)
-}
-
-func (t *TimeNano) UnmarshalJSON(b []byte) error {
-	s, err := strconv.Unquote(string(b))
-	if err != nil {
-		return err
-	}
-	tt := time.Time{}
-	tt, err = time.Parse("2006-01-02T15:04:05.999999", s)
-	// if strings.Contains(s, ".") {
-	// 	tt, err = time.Parse("2006-01-02T15:04:05.999999", s)
-	// } else {
-	// 	tt, err = time.Parse("2006-01-02T15:04:05", s)
-	// }
-	if err != nil {
-		return err
-	}
-	*t = TimeNano(tt)
-	return nil
-}
-
-func (t TimeNano) MarshalJSON() ([]byte, error) {
-	s := t.Time().Format("2006-01-02T15:04:05.999999")
-	s = strconv.Quote(s)
-	return []byte(s), nil
-}
 
 // type Metadata struct {
 // 	Asset  MetadataAsset `json:"asset"`
