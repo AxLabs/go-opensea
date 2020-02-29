@@ -38,7 +38,7 @@ type Event struct {
 	CustomEventName     interface{}   `json:"custom_event_name"`
 	Quantity            string        `json:"quantity"`
 	PayoutAmount        interface{}   `json:"payout_amount"`
-	EventTimestamp      string        `json:"event_timestamp"`
+	EventTimestamp      TimeNano      `json:"event_timestamp"`
 	Relayer             string        `json:"relayer"`
 	Collection          int64         `json:"collection"`
 	PayoutAccount       interface{}   `json:"payout_account"`
