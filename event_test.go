@@ -5,13 +5,17 @@ import (
 	"time"
 )
 
-func TestGetEvents(t *testing.T) {
+func TestRetrievingEvents(t *testing.T) {
 	is := initializeTest(t)
 
-	after := time.Now().Unix() - 86400
-	before := time.Now().Unix()
-	typ := EventTypeSuccessful
-	ret, err := o.GetEvents(contract, after, before, &typ)
+	params := NewRetrievingEventsParams()
+	err := params.SetAssetContractAddress(contract)
+	is.Nil(err)
+
+	params.OccurredAfter = time.Now().Unix() - 86400
+	params.OccurredBefore = time.Now().Unix()
+	params.EventType = EventTypeSuccessful
+	ret, err := o.RetrievingEvents(params)
 	is.Nil(err)
 	print(len(ret))
 	print(*ret[0])

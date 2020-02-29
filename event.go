@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/url"
+	"time"
 )
 
 type Event struct {
@@ -89,6 +90,7 @@ type AssetBundle struct {
 type EventType string
 
 const (
+	EventTypeNone               EventType = ""
 	EventTypeCreated            EventType = "created"
 	EventTypeSuccessful         EventType = "successful"
 	EventTypeCancelled          EventType = "cancelled"
@@ -99,38 +101,97 @@ const (
 	EventTypeCompositionCreated EventType = "composition_created"
 )
 
-func (o Opensea) GetEvents(assetContractAddress string, occurredAfter int64, occurredBefore int64, eventType *EventType) ([]*Event, error) {
-	ctx := context.TODO()
-	return o.GetEventsWithContext(ctx, assetContractAddress, occurredAfter, occurredBefore, eventType)
+type AuctionType string
+
+const (
+	AuctionTypeNone     AuctionType = ""
+	AuctionTypeEnglish  AuctionType = "english"
+	AuctionTypeDutch    AuctionType = "dutch"
+	AuctionTypeMinPrice AuctionType = "min-price"
+)
+
+type RetrievingEventsParams struct {
+	AssetContractAddress Address
+	TokenID              int32
+	AccountAddress       Address
+	EventType            EventType
+	OnlyOpensea          bool
+	AuctionType          AuctionType
+	Offset               int
+	Limit                int
+	OccurredBefore       int64
+	OccurredAfter        int64
 }
 
-func (o Opensea) GetEventsWithContext(ctx context.Context, assetContractAddress string, occurredAfter int64, occurredBefore int64, eventType *EventType) (events []*Event, err error) {
-
-	addr, err := ParseAddress(assetContractAddress)
-	if err != nil {
-		return
+func NewRetrievingEventsParams() *RetrievingEventsParams {
+	return &RetrievingEventsParams{
+		AssetContractAddress: NullAddress,
+		TokenID:              0,
+		AccountAddress:       NullAddress,
+		EventType:            EventTypeNone,
+		OnlyOpensea:          false,
+		AuctionType:          AuctionTypeNone,
+		Offset:               0,
+		Limit:                100,
+		OccurredBefore:       time.Now().Unix(),
+		OccurredAfter:        time.Now().Unix() - 3600,
 	}
+}
 
-	offset := 0
-	limit := 100
+func (p *RetrievingEventsParams) SetAssetContractAddress(addr string) (err error) {
+	p.AssetContractAddress, err = ParseAddress(addr)
+	return
+}
 
+func (p *RetrievingEventsParams) SetAccountAddress(addr string) (err error) {
+	p.AccountAddress, err = ParseAddress(addr)
+	return
+}
+
+func (p RetrievingEventsParams) Encode() string {
 	q := url.Values{}
-	q.Set("asset_contract_address", addr.String())
-	q.Set("occurred_after", fmt.Sprintf("%d", occurredAfter))
-	q.Set("occurred_before", fmt.Sprintf("%d", occurredBefore))
-	q.Set("limit", fmt.Sprintf("%d", limit))
-	q.Set("order_by", "created_date")
-	q.Set("order_direction", "asc")
 
-	if eventType != nil {
-		q.Set("event_type", string(*eventType))
+	if p.AssetContractAddress != NullAddress {
+		q.Set("asset_contract_address", p.AssetContractAddress.String())
+	}
+	if p.TokenID != 0 {
+		q.Set("token_id", fmt.Sprintf("%d", p.TokenID))
+	}
+	if p.AccountAddress != NullAddress {
+		q.Set("account_address", p.AccountAddress.String())
+	}
+	if p.EventType != EventTypeNone {
+		q.Set("event_type", string(p.EventType))
+	}
+	if p.OnlyOpensea {
+		q.Set("only_opensea", "true")
+	} else {
+		q.Set("only_opensea", "false")
+	}
+	if p.AuctionType != AuctionTypeNone {
+		q.Set("auction_type", string(p.AuctionType))
+	}
+	q.Set("limit", fmt.Sprintf("%d", p.Limit))
+	q.Set("offset", fmt.Sprintf("%d", p.Offset))
+	q.Set("occurred_after", fmt.Sprintf("%d", p.OccurredAfter))
+	q.Set("occurred_before", fmt.Sprintf("%d", p.OccurredBefore))
+
+	return q.Encode()
+}
+
+func (o Opensea) RetrievingEvents(params *RetrievingEventsParams) ([]*Event, error) {
+	ctx := context.TODO()
+	return o.RetrievingEventsWithContext(ctx, params)
+}
+
+func (o Opensea) RetrievingEventsWithContext(ctx context.Context, params *RetrievingEventsParams) (events []*Event, err error) {
+	if params == nil {
+		params = NewRetrievingEventsParams()
 	}
 
 	events = []*Event{}
-
 	for true {
-		q.Set("offset", fmt.Sprintf("%d", offset))
-		path := "/api/v1/events/?" + q.Encode()
+		path := "/api/v1/events/?" + params.Encode()
 		b, err := o.getPath(ctx, path)
 		if err != nil {
 			return nil, err
@@ -145,24 +206,27 @@ func (o Opensea) GetEventsWithContext(ctx context.Context, assetContractAddress 
 			return nil, err
 		}
 
+		// Filters
 		tmp := make([]*Event, len(out.AssetEvents))
 		cnt := 0
 		for _, e := range out.AssetEvents {
 			// remove incorrect asset, the events are bundled collection
-			if e.Asset != nil && e.Asset.AssetContract.Address != addr {
-				continue
-			}
-
-			if e.AssetBundle != nil {
-				ok := false
-				for _, a := range e.AssetBundle.Assets {
-					if a.AssetContract.Address == addr {
-						ok = true
-						break
-					}
-				}
-				if !ok {
+			if params.AssetContractAddress != NullAddress {
+				if e.Asset != nil && e.Asset.AssetContract.Address != params.AssetContractAddress {
 					continue
+				}
+
+				if e.AssetBundle != nil {
+					ok := false
+					for _, a := range e.AssetBundle.Assets {
+						if a.AssetContract.Address == params.AssetContractAddress {
+							ok = true
+							break
+						}
+					}
+					if !ok {
+						continue
+					}
 				}
 			}
 
@@ -171,10 +235,10 @@ func (o Opensea) GetEventsWithContext(ctx context.Context, assetContractAddress 
 		}
 		events = append(events, tmp[0:cnt]...)
 
-		if len(out.AssetEvents) < limit {
+		if len(out.AssetEvents) < params.Limit {
 			break
 		}
-		offset += limit
+		params.Offset += params.Limit
 	}
 
 	return
