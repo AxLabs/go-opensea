@@ -132,7 +132,7 @@ func (t TimeNano) MarshalJSON() ([]byte, error) {
 }
 
 type Account struct {
-	User          *User   `json:"user"`
+	User          User    `json:"user"`
 	ProfileImgURL string  `json:"profile_img_url"`
 	Address       Address `json:"address"`
 	Config        string  `json:"config"`
