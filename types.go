@@ -3,6 +3,7 @@ package opensea
 import (
 	"encoding/hex"
 	"encoding/json"
+	"errors"
 	"math/big"
 	"strconv"
 	"strings"
@@ -20,6 +21,55 @@ func (n Number) Big() *big.Int {
 type Address string
 
 const NullAddress Address = "0x0000000000000000000000000000000000000000"
+
+func IsHexAddress(s string) bool {
+	if s == "0x0" {
+		return true
+	}
+	if s[0:2] != "0x" {
+		return false
+	}
+	addressLength := 2 + 40
+	if len(s) != addressLength {
+		return false
+	}
+	if !isHex(s[2:]) {
+		return false
+	}
+	return true
+}
+
+func ParseAddress(address string) (Address, error) {
+	if !IsHexAddress(address) {
+		return "", errors.New("Invalid address: " + address)
+	}
+	return Address(strings.ToLower(address)), nil
+}
+
+func (a Address) String() string {
+	return string(a)
+}
+
+func (a Address) IsNullAddress() bool {
+	if a.String() == NullAddress.String() {
+		return true
+	}
+	return false
+}
+
+func (a *Address) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	*a, err = ParseAddress(s)
+	return err
+}
+
+func (a Address) MarshalJSON() ([]byte, error) {
+	s := strconv.Quote(a.String())
+	return []byte(s), nil
+}
 
 type Bytes []byte
 
@@ -81,18 +131,6 @@ func (t TimeNano) MarshalJSON() ([]byte, error) {
 	return []byte(s), nil
 }
 
-type Asset struct {
-	TokenID          string  `json:"token_id"`
-	ImageURL         string  `json:"image_url"`
-	ImageOriginalURL string  `json:"image_original_url"`
-	Name             string  `json:"name"`
-	Description      string  `json:"description"`
-	ExternalLink     string  `json:"external_link"`
-	Owner            Account `json:"owner"`
-	Permalink        string  `json:"permalink"`
-	Traits           []Trait `json:"traits"`
-}
-
 type Account struct {
 	User          *User   `json:"user"`
 	ProfileImgURL string  `json:"profile_img_url"`
@@ -117,4 +155,22 @@ type Trait struct {
 type Value struct {
 	Integer *int64
 	String  *string
+}
+
+// isHexCharacter returns bool of c being a valid hexadecimal.
+func isHexCharacter(c byte) bool {
+	return ('0' <= c && c <= '9') || ('a' <= c && c <= 'f') || ('A' <= c && c <= 'F')
+}
+
+// isHex validates whether each byte is valid hexadecimal string.
+func isHex(str string) bool {
+	if len(str)%2 != 0 {
+		return false
+	}
+	for _, c := range []byte(str) {
+		if !isHexCharacter(c) {
+			return false
+		}
+	}
+	return true
 }
