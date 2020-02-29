@@ -129,7 +129,7 @@ func NewRetrievingEventsParams() *RetrievingEventsParams {
 		TokenID:              0,
 		AccountAddress:       NullAddress,
 		EventType:            EventTypeNone,
-		OnlyOpensea:          false,
+		OnlyOpensea:          true,
 		AuctionType:          AuctionTypeNone,
 		Offset:               0,
 		Limit:                100,
