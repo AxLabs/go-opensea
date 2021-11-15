@@ -4,11 +4,19 @@ Golang library for OpenSea APIs (https://docs.opensea.io/reference).
 
 ## Get Started
 
+Get it:
 ```
+go get github.com/gsmachado/go-opensea
+```
+
+Use it:
+```go
 TBD
 ```
 
-## Devlopment
+## Development
+
+TBD.
 
 ## Acknowledgement
 
