@@ -1,9 +1,5 @@
-module github.com/rmanzoku/go-opensea
+module github.com/gsmachado/go-opensea
 
-go 1.13
+go 1.17
 
-require (
-	github.com/cheekybits/is v0.0.0-20150225183255-68e9c0620927
-	github.com/ethereum/go-ethereum v1.9.10
-	github.com/pkg/errors v0.8.1
-)
+require github.com/cheekybits/is v0.0.0-20150225183255-68e9c0620927
