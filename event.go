@@ -1,8 +1,6 @@
 package opensea
 
 import (
-	"context"
-	"encoding/json"
 	"fmt"
 	"net/url"
 	"time"
@@ -189,67 +187,67 @@ func (p RetrievingEventsParams) Encode() string {
 	return q.Encode()
 }
 
-func (o Opensea) RetrievingEvents(params *RetrievingEventsParams) ([]*Event, error) {
-	ctx := context.TODO()
-	return o.RetrievingEventsWithContext(ctx, params)
-}
+//func (o Opensea) RetrievingEvents(params *RetrievingEventsParams) ([]*Event, error) {
+//	ctx := context.TODO()
+//	return o.RetrievingEventsWithContext(ctx, params)
+//}
 
-func (o Opensea) RetrievingEventsWithContext(ctx context.Context, params *RetrievingEventsParams) (events []*Event, err error) {
-	if params == nil {
-		params = NewRetrievingEventsParams()
-	}
-
-	events = []*Event{}
-	for true {
-		path := "/api/v1/events/?" + params.Encode()
-		b, err := o.getPath(ctx, path)
-		if err != nil {
-			return nil, err
-		}
-
-		out := &struct {
-			AssetEvents []*Event `json:"asset_events"`
-		}{}
-
-		err = json.Unmarshal(b, out)
-		if err != nil {
-			return nil, err
-		}
-
-		// Filters
-		tmp := make([]*Event, len(out.AssetEvents))
-		cnt := 0
-		for _, e := range out.AssetEvents {
-			// remove incorrect asset, the events are bundled collection
-			if params.AssetContractAddress != NullAddress {
-				if e.Asset != nil && e.Asset.AssetContract.Address != params.AssetContractAddress {
-					continue
-				}
-
-				if e.AssetBundle != nil {
-					ok := false
-					for _, a := range e.AssetBundle.Assets {
-						if a.AssetContract.Address == params.AssetContractAddress {
-							ok = true
-							break
-						}
-					}
-					if !ok {
-						continue
-					}
-				}
-			}
-
-			tmp[cnt] = e
-			cnt++
-		}
-		events = append(events, tmp[0:cnt]...)
-
-		if len(out.AssetEvents) < params.Limit {
-			break
-		}
-		params.Offset += params.Limit
-	}
-
-	return
-}
+//func (o Opensea) RetrievingEventsWithContext(ctx context.Context, params *RetrievingEventsParams) (events []*Event, err error) {
+//	if params == nil {
+//		params = NewRetrievingEventsParams()
+//	}
+//
+//	events = []*Event{}
+//	for true {
+//		path := "/api/v1/events/?" + params.Encode()
+//		b, err := o.getPath(ctx, path)
+//		if err != nil {
+//			return nil, err
+//		}
+//
+//		out := &struct {
+//			AssetEvents []*Event `json:"asset_events"`
+//		}{}
+//
+//		err = json.Unmarshal(b, out)
+//		if err != nil {
+//			return nil, err
+//		}
+//
+//		// Filters
+//		tmp := make([]*Event, len(out.AssetEvents))
+//		cnt := 0
+//		for _, e := range out.AssetEvents {
+//			// remove incorrect asset, the events are bundled collection
+//			if params.AssetContractAddress != NullAddress {
+//				if e.Asset != nil && e.Asset.AssetContract.Address != params.AssetContractAddress {
+//					continue
+//				}
+//
+//				if e.AssetBundle != nil {
+//					ok := false
+//					for _, a := range e.AssetBundle.Assets {
+//						if a.AssetContract.Address == params.AssetContractAddress {
+//							ok = true
+//							break
+//						}
+//					}
+//					if !ok {
+//						continue
+//					}
+//				}
+//			}
+//
+//			tmp[cnt] = e
+//			cnt++
+//		}
+//		events = append(events, tmp[0:cnt]...)
+//
+//		if len(out.AssetEvents) < params.Limit {
+//			break
+//		}
+//		params.Offset += params.Limit
+//	}
+//
+//	return
+//}
