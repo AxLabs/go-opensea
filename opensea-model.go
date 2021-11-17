@@ -58,7 +58,13 @@ func (a Address) IsNullAddress() bool {
 }
 
 func (a *Address) UnmarshalJSON(b []byte) error {
-	s, err := strconv.Unquote(string(b))
+	var s string
+	var err error
+	if string(b) == "null" {
+		s = NullAddress.String()
+	} else {
+		s, err = strconv.Unquote(string(b))
+	}
 	if err != nil {
 		return err
 	}
@@ -201,7 +207,7 @@ type Asset struct {
 }
 
 type AssetContract struct {
-	Address                     *Address    `json:"address"`
+	Address                     Address     `json:"address"`
 	AssetContractType           string      `json:"asset_contract_type"`
 	CreatedDate                 string      `json:"created_date"`
 	Name                        string      `json:"name"`
@@ -222,7 +228,7 @@ type AssetContract struct {
 	OpenseaSellerFeeBasisPoints int64       `json:"opensea_seller_fee_basis_points"`
 	BuyerFeeBasisPoints         int64       `json:"buyer_fee_basis_points"`
 	SellerFeeBasisPoints        int64       `json:"seller_fee_basis_points"`
-	PayoutAddress               *Address    `json:"payout_address"`
+	PayoutAddress               Address     `json:"payout_address"`
 }
 
 type StatResponse struct {

@@ -14,11 +14,11 @@ func TestAssetResponse(t *testing.T) {
 		log.Fatalf("file not found...")
 	}
 
-	osAsset := AssetResponse{}
+	osAsset := &AssetResponse{}
 
-	err = json.Unmarshal(inputFile, &osAsset)
+	err = json.Unmarshal(inputFile, osAsset)
 	if err != nil {
-		log.Fatalf(err.Error())
+		assert.FailNow(t, err.Error())
 	}
 
 	assert.NotNil(t, osAsset)
@@ -30,9 +30,9 @@ func TestStatResponse(t *testing.T) {
 		log.Fatalf("file not found...")
 	}
 
-	osStat := StatResponse{}
+	osStat := &StatResponse{}
 
-	err = json.Unmarshal(inputFile, &osStat)
+	err = json.Unmarshal(inputFile, osStat)
 	if err != nil {
 		assert.FailNow(t, err.Error())
 	}

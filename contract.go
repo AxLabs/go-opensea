@@ -28,7 +28,7 @@ type Contract struct {
 	OpenseaSellerFeeBasisPoints int64       `json:"opensea_seller_fee_basis_points"`
 	BuyerFeeBasisPoints         int64       `json:"buyer_fee_basis_points"`
 	SellerFeeBasisPoints        int64       `json:"seller_fee_basis_points"`
-	PayoutAddress               interface{} `json:"payout_address"`
+	PayoutAddress               Address     `json:"payout_address"`
 }
 
 func (o Opensea) GetSingleContract(assetContractAddress string) (*Contract, error) {
@@ -43,7 +43,7 @@ func (o Opensea) GetSingleContractWithContext(ctx context.Context, assetContract
 		return nil, err
 	}
 
-	contract = new(Contract)
+	contract = &Contract{}
 	err = json.Unmarshal(b, contract)
 	return
 }
