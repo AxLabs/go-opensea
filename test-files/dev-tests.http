@@ -1,0 +1,49 @@
+GET http://localhost:8080/api/all
+Accept: application/json
+
+###
+# Get all NFT assets from an owner
+#
+# curl --request GET
+#     --url 'https://api.opensea.io/api/v1/assets?owner=0x24D7A9dAf84a3f30b279B931A732F58C4Eb0e52b&order_direction=desc&offset=0&limit=20'
+GET https://api.opensea.io/api/v1/assets?owner=0x24D7A9dAf84a3f30b279B931A732F58C4Eb0e52b&order_direction=desc&offset=0&limit=20
+Accept: application/json
+X-API-KEY: {{OPENSEA_API_TOKEN}}
+
+###
+
+# curl --request GET
+#     --url 'https://api.opensea.io/api/v1/events?only_opensea=false&offset=0&limit=20'
+#     --header 'Accept: application/json'
+GET https://api.opensea.io/api/v1/events?only_opensea=false&offset=0&limit=20
+Accept: application/json
+X-API-KEY: {{OPENSEA_API_TOKEN}}
+
+###
+
+# curl --request GET
+#     --url 'https://api.opensea.io/api/v1/events?asset_contract_address=a&token_id=a&only_opensea=false&offset=0&limit=20'
+#     --header 'Accept: application/json'
+GET https://api.opensea.io/api/v1/events?asset_contract_address=0x251b5f14a825c537ff788604ea1b58e49b70726f&only_opensea=false&offset=0
+Accept: application/json
+X-API-KEY: {{OPENSEA_API_TOKEN}}
+
+###
+
+# curl --request GET
+#     --url 'https://api.opensea.io/api/v1/events?collection_slug=forgotten-runes-mafriends&event_type=successful&only_opensea=false&offset=0&limit=20'
+#     --header 'Accept: application/json'
+#     --header 'X-API-KEY: b59d5a81b2334031a99f48f60685859f'
+GET https://api.opensea.io/api/v1/events?collection_slug=forgotten-runes-mafriends&event_type=successful&only_opensea=false&offset=0&limit=20
+Accept: application/json
+X-API-KEY: {{OPENSEA_API_TOKEN}}
+
+###
+
+# curl --request GET
+#     --url https://api.opensea.io/api/v1/collection/doodles-official
+GET https://api.opensea.io/api/v1/collection/doodles-official
+X-API-KEY: {{OPENSEA_API_TOKEN}}
+
+###
+
