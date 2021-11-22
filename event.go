@@ -222,7 +222,7 @@ func (o Opensea) RetrievingEventsWithContext(ctx context.Context, params *Retrie
 		// Filters
 		tmp := make([]*Event, len(eventsResp.AssetEvents))
 		cnt := 0
-		for _, e := range eventsResp.AssetEvents {
+		for i, e := range eventsResp.AssetEvents {
 			// remove incorrect asset, the events are bundled collection
 			if params.AssetContractAddress != NullAddress {
 				if e.Asset != nil && e.Asset.AssetContract.Address != params.AssetContractAddress {
@@ -243,7 +243,7 @@ func (o Opensea) RetrievingEventsWithContext(ctx context.Context, params *Retrie
 				}
 			}
 
-			tmp[cnt] = &e
+			tmp[cnt] = &eventsResp.AssetEvents[i]
 			cnt++
 		}
 		events = append(events, tmp[0:cnt]...)
