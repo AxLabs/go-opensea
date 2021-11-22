@@ -6,7 +6,7 @@ import (
 )
 
 type Contract struct {
-	// Collection                  Collection  `json:"collection"`
+	Collection                  Collection  `json:"collection"`
 	Address                     Address     `json:"address"`
 	AssetContractType           string      `json:"asset_contract_type"`
 	CreatedDate                 string      `json:"created_date"`
@@ -38,7 +38,7 @@ func (o Opensea) GetSingleContract(assetContractAddress string) (*Contract, erro
 
 func (o Opensea) GetSingleContractWithContext(ctx context.Context, assetContractAddress string) (contract *Contract, err error) {
 	path := "/api/v1/asset_contract/" + assetContractAddress
-	b, err := o.getPath(ctx, path)
+	b, err := o.GetPath(ctx, path)
 	if err != nil {
 		return nil, err
 	}

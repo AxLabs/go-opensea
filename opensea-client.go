@@ -52,7 +52,7 @@ func (o Opensea) GetSingleAsset(assetContractAddress string, tokenID *big.Int) (
 
 func (o Opensea) GetSingleAssetWithContext(ctx context.Context, assetContractAddress string, tokenID *big.Int) (*Asset, error) {
 	path := fmt.Sprintf("/api/v1/asset/%s/%s", assetContractAddress, tokenID.String())
-	b, err := o.getPath(ctx, path)
+	b, err := o.GetPath(ctx, path)
 	if err != nil {
 		return nil, err
 	}
@@ -60,7 +60,7 @@ func (o Opensea) GetSingleAssetWithContext(ctx context.Context, assetContractAdd
 	return ret, json.Unmarshal(b, ret)
 }
 
-func (o Opensea) getPath(ctx context.Context, path string) ([]byte, error) {
+func (o Opensea) GetPath(ctx context.Context, path string) ([]byte, error) {
 	return o.getURL(ctx, o.API+path)
 }
 

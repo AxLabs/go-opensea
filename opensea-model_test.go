@@ -25,7 +25,7 @@ func TestAssetResponse(t *testing.T) {
 }
 
 func TestStatResponse(t *testing.T) {
-	inputFile, err := ioutil.ReadFile("test-files/opensea-stats-doodles-official.json")
+	inputFile, err := ioutil.ReadFile("test-files/opensea-stats-doodles.json")
 	if err != nil {
 		log.Fatalf("file not found...")
 	}
@@ -38,4 +38,20 @@ func TestStatResponse(t *testing.T) {
 	}
 
 	assert.NotNil(t, osStat)
+}
+
+func TestSingleCollectionResponse(t *testing.T) {
+	inputFile, err := ioutil.ReadFile("test-files/opensea-collection-doodles.json")
+	if err != nil {
+		log.Fatalf("file not found...")
+	}
+
+	osColl := &CollectionSingleResponse{}
+
+	err = json.Unmarshal(inputFile, osColl)
+	if err != nil {
+		assert.FailNow(t, err.Error())
+	}
+
+	assert.NotNil(t, osColl)
 }

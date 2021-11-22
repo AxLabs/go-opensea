@@ -121,7 +121,7 @@ func (o Opensea) GetOrdersWithContext(ctx context.Context, assetContractAddress 
 	for true {
 		q.Set("offset", fmt.Sprintf("%d", offset))
 		path := "/wyvern/v1/orders?" + q.Encode()
-		b, err := o.getPath(ctx, path)
+		b, err := o.GetPath(ctx, path)
 		if err != nil {
 			return nil, err
 		}

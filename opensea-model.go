@@ -202,8 +202,8 @@ type Asset struct {
 	AssetContract        *AssetContract `json:"asset_contract"`
 	Owner                *Account       `json:"owner"`
 	Permalink            string         `json:"permalink"`
-	// Collection           *Collection    `json:"collection"`
-	Decimals int64 `json:"decimals"`
+	Collection           *Collection    `json:"collection"`
+	Decimals             int64          `json:"decimals"`
 }
 
 type AssetContract struct {
@@ -229,6 +229,39 @@ type AssetContract struct {
 	BuyerFeeBasisPoints         int64       `json:"buyer_fee_basis_points"`
 	SellerFeeBasisPoints        int64       `json:"seller_fee_basis_points"`
 	PayoutAddress               Address     `json:"payout_address"`
+}
+
+type Collection struct {
+	BannerImageUrl              string      `json:"banner_image_url"`
+	ChatUrl                     string      `json:"chat_url"`
+	CreatedDate                 string      `json:"created_date"`
+	DefaultToFiat               bool        `json:"default_to_fiat"`
+	Description                 string      `json:"description"`
+	DevBuyerFeeBasisPoints      string      `json:"dev_buyer_fee_basis_points"`
+	DevSellerFeeBasisPoints     string      `json:"dev_seller_fee_basis_points"`
+	DiscordUrl                  string      `json:"discord_url"`
+	DisplayData                 interface{} `json:"display_data"`
+	ExternalUrl                 string      `json:"external_url"`
+	Featured                    bool        `json:"featured"`
+	FeaturedImageUrl            string      `json:"featured_image_url"`
+	Hidden                      bool        `json:"hidden"`
+	SafelistRequestStatus       string      `json:"safelist_request_status"`
+	ImageUrl                    string      `json:"image_url"`
+	IsSubjectToWhitelist        bool        `json:"is_subject_to_whitelist"`
+	LargeImageUrl               string      `json:"large_image_url"`
+	MediumUsername              string      `json:"medium_username"`
+	Name                        string      `json:"name"`
+	OnlyProxiedTransfers        bool        `json:"only_proxied_transfers"`
+	OpenseaBuyerFeeBasisPoints  string      `json:"opensea_buyer_fee_basis_points"`
+	OpenseaSellerFeeBasisPoints string      `json:"opensea_seller_fee_basis_points"`
+	PayoutAddress               string      `json:"payout_address"`
+	RequireEmail                bool        `json:"require_email"`
+	ShortDescription            string      `json:"short_description"`
+	Slug                        string      `json:"slug"`
+	TelegramUrl                 string      `json:"telegram_url"`
+	TwitterUsername             string      `json:"twitter_username"`
+	InstagramUsername           string      `json:"instagram_username"`
+	WikiUrl                     string      `json:"wiki_url"`
 }
 
 type StatResponse struct {
@@ -257,4 +290,15 @@ type Stat struct {
 	NumReports            int64   `json:"num_reports"`
 	MarketCap             float64 `json:"market_cap"`
 	FloorPrice            float64 `json:"floor_price"`
+}
+
+type CollectionSingleResponse struct {
+	Collection CollectionSingle `json:"collection"`
+}
+
+type CollectionSingle struct {
+	Editors               []Address      `json:"editors"`
+	PaymentTokens         []PaymentToken `json:"payment_tokens"`
+	PrimaryAssetContracts []Contract     `json:"primary_asset_contracts"`
+	Collection
 }

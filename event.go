@@ -13,7 +13,7 @@ type AssetEventsResponse struct {
 }
 
 type Event struct {
-	ID                  int64               `json:"id"`
+	ID                  uint64              `json:"id"`
 	Transaction         *Transaction        `json:"transaction"`
 	PaymentToken        *PaymentToken       `json:"payment_token"`
 	Asset               *Asset              `json:"asset"`
@@ -44,7 +44,7 @@ type Event struct {
 	PayoutAmount        interface{}         `json:"payout_amount"`
 	EventTimestamp      TimeNano            `json:"event_timestamp"`
 	Relayer             string              `json:"relayer"`
-	Collection          int64               `json:"collection"`
+	Collection          uint64              `json:"collection"`
 	PayoutAccount       interface{}         `json:"payout_account"`
 	PayoutAssetContract interface{}         `json:"payout_asset_contract"`
 	PayoutCollection    interface{}         `json:"payout_collection"`
@@ -57,13 +57,13 @@ func (e Event) IsBundle() bool {
 }
 
 type PaymentToken struct {
-	Symbol   string  `json:"symbol"`
-	Address  Address `json:"address"`
-	ImageURL string  `json:"image_url"`
-	Name     string  `json:"name"`
-	Decimals int64   `json:"decimals"`
-	EthPrice string  `json:"eth_price"`
-	UsdPrice string  `json:"usd_price"`
+	Symbol   string      `json:"symbol"`
+	Address  Address     `json:"address"`
+	ImageURL string      `json:"image_url"`
+	Name     string      `json:"name"`
+	Decimals int64       `json:"decimals"`
+	EthPrice interface{} `json:"eth_price"`
+	UsdPrice interface{} `json:"usd_price"`
 }
 
 type Transaction struct {
@@ -206,7 +206,7 @@ func (o Opensea) RetrievingEventsWithContext(ctx context.Context, params *Retrie
 	events = []*Event{}
 	for true {
 		path := "/api/v1/events/?" + params.Encode()
-		b, err := o.getPath(ctx, path)
+		b, err := o.GetPath(ctx, path)
 		if err != nil {
 			return nil, err
 		}
