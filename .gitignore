@@ -14,6 +14,9 @@ go.sum
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
 
+# private envs for http-client
+**/http-client.private.env.json
+
 # Dependency directories (remove the comment below to include it)
 # vendor/
 
