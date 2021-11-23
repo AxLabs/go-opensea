@@ -9,47 +9,47 @@ import (
 )
 
 type AssetEventsResponse struct {
-	AssetEvents []Event `json:"asset_events"`
+	AssetEvents []Event `json:"asset_events" bson:"asset_events"`
 }
 
 type Event struct {
-	ID                  uint64              `json:"id"`
-	Transaction         *Transaction        `json:"transaction"`
-	PaymentToken        *PaymentToken       `json:"payment_token"`
-	Asset               *Asset              `json:"asset"`
-	AssetBundle         *AssetBundle        `json:"asset_bundle"`
-	WinnerAccount       *Account            `json:"winner_account"`
-	FromAccount         *Account            `json:"from_account"`
-	ToAccount           *Account            `json:"to_account"`
-	OwnerAccount        *Account            `json:"owner_account"`
-	ApprovedAccount     *Account            `json:"approved_account"`
-	Seller              *Account            `json:"seller"`
-	DevFeePaymentEvent  *DevFeePaymentEvent `json:"dev_fee_payment_event"`
-	CollectionSlug      string              `json:"collection_slug"`
-	CreatedDate         TimeNano            `json:"created_date"`
-	ModifiedDate        TimeNano            `json:"modified_date"`
-	ContractAddress     Address             `json:"contract_address"`
-	LogIndex            interface{}         `json:"log_index"`
-	EventType           EventType           `json:"event_type"`
-	AuctionType         string              `json:"auction_type"`
-	StartingPrice       string              `json:"starting_price"`
-	EndingPrice         string              `json:"ending_price"`
-	Duration            interface{}         `json:"duration"`
-	MinPrice            Number              `json:"min_price"`
-	OfferedTo           Number              `json:"offered_to"`
-	BidAmount           Number              `json:"bid_amount"`
-	TotalPrice          Number              `json:"total_price"`
-	CustomEventName     interface{}         `json:"custom_event_name"`
-	Quantity            string              `json:"quantity"`
-	PayoutAmount        interface{}         `json:"payout_amount"`
-	EventTimestamp      TimeNano            `json:"event_timestamp"`
-	Relayer             string              `json:"relayer"`
-	Collection          uint64              `json:"collection"`
-	PayoutAccount       interface{}         `json:"payout_account"`
-	PayoutAssetContract interface{}         `json:"payout_asset_contract"`
-	PayoutCollection    interface{}         `json:"payout_collection"`
-	BuyOrder            uint64              `json:"buy_order"`
-	SellOrder           uint64              `json:"sell_order"`
+	ID                  uint64              `json:"id" bson:"id"`
+	Transaction         *Transaction        `json:"transaction" bson:"transaction"`
+	PaymentToken        *PaymentToken       `json:"payment_token" bson:"payment_token"`
+	Asset               *Asset              `json:"asset" bson:"asset"`
+	AssetBundle         *AssetBundle        `json:"asset_bundle" bson:"asset_bundle"`
+	WinnerAccount       *Account            `json:"winner_account" bson:"winner_account"`
+	FromAccount         *Account            `json:"from_account" bson:"from_account"`
+	ToAccount           *Account            `json:"to_account" bson:"to_account"`
+	OwnerAccount        *Account            `json:"owner_account" bson:"owner_account"`
+	ApprovedAccount     *Account            `json:"approved_account" bson:"approved_account"`
+	Seller              *Account            `json:"seller" bson:"seller"`
+	DevFeePaymentEvent  *DevFeePaymentEvent `json:"dev_fee_payment_event" bson:"dev_fee_payment_event"`
+	CollectionSlug      string              `json:"collection_slug" bson:"collection_slug"`
+	CreatedDate         TimeNano            `json:"created_date" bson:"created_date"`
+	ModifiedDate        TimeNano            `json:"modified_date" bson:"modified_date"`
+	ContractAddress     Address             `json:"contract_address" bson:"contract_address"`
+	LogIndex            interface{}         `json:"log_index" bson:"log_index"`
+	EventType           EventType           `json:"event_type" bson:"event_type"`
+	AuctionType         string              `json:"auction_type" bson:"auction_type"`
+	StartingPrice       string              `json:"starting_price" bson:"starting_price"`
+	EndingPrice         string              `json:"ending_price" bson:"ending_price"`
+	Duration            interface{}         `json:"duration" bson:"duration"`
+	MinPrice            Number              `json:"min_price" bson:"min_price"`
+	OfferedTo           Number              `json:"offered_to" bson:"offered_to"`
+	BidAmount           Number              `json:"bid_amount" bson:"bid_amount"`
+	TotalPrice          Number              `json:"total_price" bson:"total_price"`
+	CustomEventName     interface{}         `json:"custom_event_name" bson:"custom_event_name"`
+	Quantity            string              `json:"quantity" bson:"quantity"`
+	PayoutAmount        interface{}         `json:"payout_amount" bson:"payout_amount"`
+	EventTimestamp      TimeNano            `json:"event_timestamp" bson:"event_timestamp"`
+	Relayer             string              `json:"relayer" bson:"relayer"`
+	Collection          uint64              `json:"collection" bson:"collection"`
+	PayoutAccount       interface{}         `json:"payout_account" bson:"payout_account"`
+	PayoutAssetContract interface{}         `json:"payout_asset_contract" bson:"payout_asset_contract"`
+	PayoutCollection    interface{}         `json:"payout_collection" bson:"payout_collection"`
+	BuyOrder            uint64              `json:"buy_order" bson:"buy_order"`
+	SellOrder           uint64              `json:"sell_order" bson:"sell_order"`
 }
 
 func (e Event) IsBundle() bool {
@@ -57,48 +57,48 @@ func (e Event) IsBundle() bool {
 }
 
 type PaymentToken struct {
-	Symbol   string      `json:"symbol"`
-	Address  Address     `json:"address"`
-	ImageURL string      `json:"image_url"`
-	Name     string      `json:"name"`
-	Decimals int64       `json:"decimals"`
-	EthPrice interface{} `json:"eth_price"`
-	UsdPrice interface{} `json:"usd_price"`
+	Symbol   string      `json:"symbol" bson:"symbol"`
+	Address  Address     `json:"address" bson:"address"`
+	ImageURL string      `json:"image_url" bson:"image_url"`
+	Name     string      `json:"name" bson:"name"`
+	Decimals int64       `json:"decimals" bson:"decimals"`
+	EthPrice interface{} `json:"eth_price" bson:"eth_price"`
+	UsdPrice interface{} `json:"usd_price" bson:"usd_price"`
 }
 
 type Transaction struct {
-	ID               int64    `json:"id"`
-	FromAccount      Account  `json:"from_account"`
-	ToAccount        Account  `json:"to_account"`
-	CreatedDate      TimeNano `json:"created_date"`
-	ModifiedDate     TimeNano `json:"modified_date"`
-	TransactionHash  string   `json:"transaction_hash"`
-	TransactionIndex string   `json:"transaction_index"`
-	BlockNumber      string   `json:"block_number"`
-	BlockHash        string   `json:"block_hash"`
-	Timestamp        string   `json:"timestamp"`
+	ID               int64    `json:"id" bson:"id"`
+	FromAccount      Account  `json:"from_account" bson:"from_account"`
+	ToAccount        Account  `json:"to_account" bson:"to_account"`
+	CreatedDate      TimeNano `json:"created_date" bson:"created_date"`
+	ModifiedDate     TimeNano `json:"modified_date" bson:"modified_date"`
+	TransactionHash  string   `json:"transaction_hash" bson:"transaction_hash"`
+	TransactionIndex string   `json:"transaction_index" bson:"transaction_index"`
+	BlockNumber      string   `json:"block_number" bson:"block_number"`
+	BlockHash        string   `json:"block_hash" bson:"block_hash"`
+	Timestamp        string   `json:"timestamp" bson:"timestamp"`
 }
 
 type AssetBundle struct {
-	Maker         *Account       `json:"maker"`
-	Slug          string         `json:"slug"`
-	Assets        []*Asset       `json:"assets"`
-	Name          string         `json:"name"`
-	Description   string         `json:"description"`
-	ExternalLink  string         `json:"external_link"`
-	AssetContract *AssetContract `json:"asset_contract"`
-	Permalink     string         `json:"permalink"`
-	SellOrders    interface{}    `json:"sell_orders"`
+	Maker         *Account       `json:"maker" bson:"maker"`
+	Slug          string         `json:"slug" bson:"slug"`
+	Assets        []*Asset       `json:"assets" bson:"assets"`
+	Name          string         `json:"name" bson:"name"`
+	Description   string         `json:"description" bson:"description"`
+	ExternalLink  string         `json:"external_link" bson:"external_link"`
+	AssetContract *AssetContract `json:"asset_contract" bson:"asset_contract"`
+	Permalink     string         `json:"permalink" bson:"permalink"`
+	SellOrders    interface{}    `json:"sell_orders" bson:"sell_orders"`
 }
 
 // DevFeePaymentEvent is fee transfer event from OpenSea to Dev, It appears to be running in bulk on a regular basis.
 type DevFeePaymentEvent struct {
-	EventType      string       `json:"event_type"`
-	EventTimestamp string       `json:"event_timestamp"`
-	AuctionType    interface{}  `json:"auction_type"`
-	TotalPrice     interface{}  `json:"total_price"`
-	Transaction    Transaction  `json:"transaction"`
-	PaymentToken   PaymentToken `json:"payment_token"`
+	EventType      string       `json:"event_type" bson:"event_type"`
+	EventTimestamp string       `json:"event_timestamp" bson:"event_timestamp"`
+	AuctionType    interface{}  `json:"auction_type" bson:"auction_type"`
+	TotalPrice     interface{}  `json:"total_price" bson:"total_price"`
+	Transaction    Transaction  `json:"transaction" bson:"transaction"`
+	PaymentToken   PaymentToken `json:"payment_token" bson:"payment_token"`
 }
 
 type EventType string
