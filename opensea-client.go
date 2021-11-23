@@ -17,12 +17,13 @@ var (
 )
 
 type Opensea struct {
-	API    string
-	APIKey string
+	API        string
+	APIKey     string
+	httpClient *http.Client
 }
 
 type errorResponse struct {
-	Success bool `json:"success"`
+	Success bool `json:"success" bson:"success"`
 }
 
 func (e errorResponse) Error() string {
@@ -31,19 +32,38 @@ func (e errorResponse) Error() string {
 
 func NewOpensea(apiKey string) (*Opensea, error) {
 	o := &Opensea{
-		API:    mainnetAPI,
-		APIKey: apiKey,
+		API:        mainnetAPI,
+		APIKey:     apiKey,
+		httpClient: defaultHttpClient(),
 	}
 	return o, nil
 }
 
 func NewOpenseaRinkeby(apiKey string) (*Opensea, error) {
 	o := &Opensea{
-		API:    rinkebyAPI,
-		APIKey: apiKey,
+		API:        rinkebyAPI,
+		APIKey:     apiKey,
+		httpClient: defaultHttpClient(),
 	}
 	return o, nil
 }
+
+// TODO
+//func (o Opensea) GetAssets(params GetAssetsParams) (*AssetResponse, error) {
+//	ctx := context.TODO()
+//	return o.GetAssetsWithContext(ctx, params)
+//}
+
+// TODO
+//func (o Opensea) GetAssetsWithContext(ctx context.Context, params GetAssetsParams) (*AssetResponse, error) {
+//	path := fmt.Sprintf("/api/v1/assets")
+//	b, err := o.GetPath(ctx, path)
+//	if err != nil {
+//		return nil, err
+//	}
+//	ret := new(AssetResponse)
+//	return ret, json.Unmarshal(b, ret)
+//}
 
 func (o Opensea) GetSingleAsset(assetContractAddress string, tokenID *big.Int) (*Asset, error) {
 	ctx := context.TODO()
@@ -65,7 +85,7 @@ func (o Opensea) GetPath(ctx context.Context, path string) ([]byte, error) {
 }
 
 func (o Opensea) getURL(ctx context.Context, url string) ([]byte, error) {
-	client := httpClient()
+	client := o.httpClient
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
 	req.Header.Add("X-API-KEY", o.APIKey)
 	req.Header.Add("Accept", "application/json")
@@ -96,7 +116,11 @@ func (o Opensea) getURL(ctx context.Context, url string) ([]byte, error) {
 	return body, nil
 }
 
-func httpClient() *http.Client {
+func (o Opensea) SetHttpClient(httpClient *http.Client) {
+	o.httpClient = httpClient
+}
+
+func defaultHttpClient() *http.Client {
 	client := new(http.Client)
 	var transport http.RoundTripper = &http.Transport{
 		Proxy:              http.ProxyFromEnvironment,
