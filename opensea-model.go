@@ -267,7 +267,7 @@ type Collection struct {
 }
 
 type StatResponse struct {
-	Stats Stat `json:"stats" bson:"XXXXXX"`
+	Stats Stat `json:"stats" bson:"stats"`
 }
 
 type Stat struct {
