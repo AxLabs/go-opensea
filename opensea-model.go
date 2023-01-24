@@ -185,7 +185,9 @@ type AssetResponse struct {
 	Assets []Asset `json:"assets" bson:"assets"`
 }
 
+// Asset is the primary object in the OpenSea API, which represents a unique digital item whose ownership is managed by the blockchain.
 type Asset struct {
+	// todo: Support commented fields in Asset struct
 	ID                   int64          `json:"id" bson:"id"`
 	TokenID              string         `json:"token_id" bson:"token_id"`
 	NumSales             int64          `json:"num_sales" bson:"num_sales"`
@@ -200,14 +202,25 @@ type Asset struct {
 	Description          string         `json:"description" bson:"description"`
 	ExternalLink         string         `json:"external_link" bson:"external_link"`
 	AssetContract        *AssetContract `json:"asset_contract" bson:"asset_contract"`
-	Owner                *Account       `json:"owner" bson:"owner"`
 	Permalink            string         `json:"permalink" bson:"permalink"`
 	Collection           *Collection    `json:"collection" bson:"collection"`
 	Decimals             int64          `json:"decimals" bson:"decimals"`
 	TokenMetadata        string         `json:"token_metadata" bson:"token_metadata"`
-	Traits               interface{}    `json:"traits" bson:"traits"`
+	//IsNSFW               bool           `json:"is_nsfw" bson:"is_nsfw"`
+	Owner *Account `json:"owner" bson:"owner"`
+	//SeaportSellOrders       string         `json:"seaport_sell_orders" bson:"seaport_sell_orders"`
+	//Creator                 *Creator       `json:"creator" bson:"creator"`
+	Traits interface{} `json:"traits" bson:"traits"`
+	//LastSale                string         `json:"last_sale" bson:"last_sale"`
+	//TopBid                  int64          `json:"top_bid" bson:"top_bid"`
+	//ListingDate             string         `json:"listing_date" bson:"listing_date"`
+	//SupportsWyvern          string         `json:"supports_wyvern" bson:"supports_wyvern"`
+	//RarityData              *RarityData    `json:"rarity_data" bson:"rarity_data"`
+	//TransferFee             int64          `json:"transfer_fee" bson:"transfer_fee"`
+	//TransferFeePaymentToken string         `json:"transfer_fee_payment_token" bson:"transfer_fee_payment_token"`
 }
 
+// AssetContract contains data about the contract itself, such as the Bored Ape Yacht Club contract.
 type AssetContract struct {
 	Address                     Address     `json:"address" bson:"address"`
 	AssetContractType           string      `json:"asset_contract_type" bson:"asset_contract_type"`
@@ -233,7 +246,14 @@ type AssetContract struct {
 	PayoutAddress               Address     `json:"payout_address" bson:"payout_address"`
 }
 
+// Collection is used to represent all the assets in a single (or multiple) contract addresses and help users group items from the same
+// creator. They have one or more owners and are typically associated with important metadata such as creator earnings configurations and
+// descriptions.
 type Collection struct {
+	// todo: Support commented fields in Collection struct for /collections GET request
+	//PrimaryAssetContracts
+	//Traits
+	//Stats
 	BannerImageUrl              string      `json:"banner_image_url" bson:"banner_image_url"`
 	ChatUrl                     string      `json:"chat_url" bson:"chat_url"`
 	CreatedDate                 string      `json:"created_date" bson:"created_date"`
@@ -264,6 +284,10 @@ type Collection struct {
 	TwitterUsername             string      `json:"twitter_username" bson:"twitter_username"`
 	InstagramUsername           string      `json:"instagram_username" bson:"instagram_username"`
 	WikiUrl                     string      `json:"wiki_url" bson:"wiki_url"`
+	//IsNSFW                      bool        `json:"is_nsfw" bson:"is_nsfw"`
+	//Fees                        interface{} `json:"fees" bson:"fees"`
+	//IsRarityEnabled             bool        `json:"is_rarity_enabled" bson:"is_rarity_enabled"`
+	//IsCreatorFeesEnforced       bool        `json:"is_creator_fees_enforced" bson:"is_creator_fees_enforced"`
 }
 
 type StatResponse struct {
@@ -271,27 +295,44 @@ type StatResponse struct {
 }
 
 type Stat struct {
-	OneDayVolume          float64 `json:"one_day_volume" bson:"one_day_volume"`
-	OneDayChange          float64 `json:"one_day_change" bson:"one_day_change"`
-	OneDaySales           float64 `json:"one_day_sales" bson:"one_day_sales"`
-	OneDayAveragePrice    float64 `json:"one_day_average_price" bson:"one_day_average_price"`
-	SevenDayVolume        float64 `json:"seven_day_volume" bson:"seven_day_volume"`
-	SevenDayChange        float64 `json:"seven_day_change" bson:"seven_day_change"`
-	SevenDaySales         float64 `json:"seven_day_sales" bson:"seven_day_sales"`
-	SevenDayAveragePrice  float64 `json:"seven_day_average_price" bson:"seven_day_average_price"`
+	// todo: Support commented fields in Stat struct for /collections GET request
+	//OneHourVolume         float64 `json:"one_hour_volume" bson:"one_hour_volume"`
+	//OneHourChange         float64 `json:"one_hour_change" bson:"one_hour_change"`
+	//OneHourSales          float64 `json:"one_hour_sales" bson:"one_hour_sales"`
+	//OneHourSalesChange    float64 `json:"one_hour_sales_change" bson:"one_hour_sales_change"`
+	//OneHourAveragePrice   float64 `json:"one_hour_average_price" bson:"one_hour_average_price"`
+	//OneHourDifference     float64 `json:"one_hour_difference" bson:"one_hour_difference"`
+	//SixHourVolume         float64 `json:"six_hour_volume" bson:"six_hour_volume"`
+	//SixHourChange         float64 `json:"six_hour_change" bson:"six_hour_change"`
+	//SixHourSales          float64 `json:"six_hour_sales" bson:"six_hour_sales"`
+	//SixHourSalesChange    float64 `json:"six_hour_sales_change" bson:"six_hour_sales_change"`
+	//SixHourAveragePrice   float64 `json:"six_hour_avg_price" bson:"six_hour_avg_price"`
+	//SixHourDifference     float64 `json:"six_hour_difference" bson:"six_hour_difference"`
+	OneDayVolume float64 `json:"one_day_volume" bson:"one_day_volume"`
+	OneDayChange float64 `json:"one_day_change" bson:"one_day_change"`
+	OneDaySales  float64 `json:"one_day_sales" bson:"one_day_sales"`
+	//OneDaySalesChange     float64 `json:"one_day_sales_change" bson:"one_day_sales_change"`
+	OneDayAveragePrice float64 `json:"one_day_average_price" bson:"one_day_average_price"`
+	//OneDayDifference      float64 `json:"one_day_difference" bson:"one_day_difference"`
+	SevenDayVolume       float64 `json:"seven_day_volume" bson:"seven_day_volume"`
+	SevenDayChange       float64 `json:"seven_day_change" bson:"seven_day_change"`
+	SevenDaySales        float64 `json:"seven_day_sales" bson:"seven_day_sales"`
+	SevenDayAveragePrice float64 `json:"seven_day_average_price" bson:"seven_day_average_price"`
+	//SevenDayDifference    float64 `json:"seven_day_difference" bson:"seven_day_difference"`
 	ThirtyDayVolume       float64 `json:"thirty_day_volume" bson:"thirty_day_volume"`
 	ThirtyDayChange       float64 `json:"thirty_day_change" bson:"thirty_day_change"`
 	ThirtyDaySales        float64 `json:"thirty_day_sales" bson:"thirty_day_sales"`
 	ThirtyDayAveragePrice float64 `json:"thirty_day_average_price" bson:"thirty_day_average_price"`
-	TotalVolume           float64 `json:"total_volume" bson:"total_volume"`
-	TotalSales            float64 `json:"total_sales" bson:"total_sales"`
-	TotalSupply           float64 `json:"total_supply" bson:"total_supply"`
-	Count                 float64 `json:"count" bson:"count"`
-	NumOwners             float64 `json:"num_owners" bson:"num_owners"`
-	AveragePrice          float64 `json:"average_price" bson:"average_price"`
-	NumReports            float64 `json:"num_reports" bson:"num_reports"`
-	MarketCap             float64 `json:"market_cap" bson:"market_cap"`
-	FloorPrice            float64 `json:"floor_price" bson:"floor_price"`
+	//ThirtyDayDifference   float64 `json:"thirty_day_difference" bson:"thirty_day_difference"`
+	TotalVolume  float64 `json:"total_volume" bson:"total_volume"`
+	TotalSales   float64 `json:"total_sales" bson:"total_sales"`
+	TotalSupply  float64 `json:"total_supply" bson:"total_supply"`
+	Count        float64 `json:"count" bson:"count"`
+	NumOwners    float64 `json:"num_owners" bson:"num_owners"`
+	AveragePrice float64 `json:"average_price" bson:"average_price"`
+	NumReports   float64 `json:"num_reports" bson:"num_reports"`
+	MarketCap    float64 `json:"market_cap" bson:"market_cap"`
+	FloorPrice   float64 `json:"floor_price" bson:"floor_price"`
 }
 
 type CollectionSingleResponse struct {

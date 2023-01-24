@@ -8,6 +8,8 @@ import (
 )
 
 type Order struct {
+	// todo: Support commented fields in Order struct
+	// todo: Support seaport sell orders ()
 	ID    int64 `json:"id" bson:"id"`
 	Asset Asset `json:"asset" bson:"asset"`
 	// AssetBundle          interface{}          `json:"asset_bundle" bson:"asset_bundle"`
