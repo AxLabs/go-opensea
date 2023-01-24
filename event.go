@@ -12,6 +12,8 @@ type AssetEventsResponse struct {
 	AssetEvents []Event `json:"asset_events" bson:"asset_events"`
 }
 
+// Event represents a state change that occurs for an asset. This includes putting an asset on sale, bidding on it, selling it,
+// cancelling a sale, transferring an asset, and more.
 type Event struct {
 	ID                  uint64              `json:"id" bson:"id"`
 	Transaction         *Transaction        `json:"transaction" bson:"transaction"`
@@ -79,6 +81,7 @@ type Transaction struct {
 	Timestamp        string   `json:"timestamp" bson:"timestamp"`
 }
 
+// AssetBundle is a simplified version of an asset or an asset bundle.
 type AssetBundle struct {
 	Maker         *Account       `json:"maker" bson:"maker"`
 	Slug          string         `json:"slug" bson:"slug"`
