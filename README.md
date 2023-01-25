@@ -46,6 +46,7 @@ Do not hesitate to fork and open Pull Requests that would resolve any of the ope
 ## Roadmap (timeline tbd)
 
 #### Support APIs
+
 - [ ] Add support for `/assets`
 - [ ] Add support for `/events`
 - [ ] Add support for `/collections`
@@ -55,6 +56,7 @@ Do not hesitate to fork and open Pull Requests that would resolve any of the ope
 - [ ] Add support for `/collection/{collection_slug}/stats`
 
 #### Testing
+
 - [ ] Write UTs for all above endpoints
 - [ ] Include integration tests for all endpoints
 
@@ -62,6 +64,10 @@ Do not hesitate to fork and open Pull Requests that would resolve any of the ope
 
 This library was forked and reworked from https://github.com/rmanzoku/go-opensea at 
 [this commit](https://github.com/rmanzoku/go-opensea/tree/e0722c7d22bbe26cbf222b9503552d05b44af289). Thanks for it! :tada:
+
+## Sponsoring
+
+Support is highly appreciated, if you like what we've built please consider [sponsoring](https://github.com/sponsors/AxLabs) us via GitHub. 
 
 ## Contact
 
