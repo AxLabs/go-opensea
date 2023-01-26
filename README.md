@@ -7,7 +7,7 @@ This is a Golang library for [OpenSea API v1](https://docs.opensea.io/reference)
 Execute the command below to download the library.
 
 ```
-go get github.com/gsmachado/go-opensea
+go get github.com/AxLabs/go-opensea
 ```
 
 Instantiate an Opensea instance and then call one of its provided methods to interact with the Opensea API.
@@ -16,7 +16,7 @@ Instantiate an Opensea instance and then call one of its provided methods to int
 func getAssetContract() {
 o, err := NewOpensea(os.Getenv("API_KEY"))
 if err != nil {
-panic("could not instantiate Opensea instance")
+panic("could not instantiate Opensea client")
 }
 singleContract, err := o.GetSingleContract("0xdceaf1652a131f32a821468dc03a92df0edd86ea")
 if err != nil {
@@ -69,14 +69,16 @@ features. Take a look at the existing issues in this repository that specify som
 
 ## Acknowledgement
 
-This library was forked and reworked from https://github.com/rmanzoku/go-opensea at
+This library was reworked from https://github.com/rmanzoku/go-opensea at 
 [this commit](https://github.com/rmanzoku/go-opensea/tree/e0722c7d22bbe26cbf222b9503552d05b44af289). Thanks for it! :tada:
 
 ## Sponsoring
 
-Support is highly appreciated, if you like what we've built please consider [sponsoring](https://github.com/sponsors/AxLabs) us via GitHub.
+Financial support is highly appreciated!
+
+If you like what we've built please consider [sponsoring us](https://github.com/sponsors/AxLabs) via GitHub. 
 
 ## Contact
 
-Reach out to us in our [Discord server](https://discord.axlabs.com/) in the `#go-opensea` channel. If you have feature requests or have
+Reach out to us in our [Discord server](https://discord.axlabs.com) in the `#go-opensea` channel. If you have feature requests or have
 identified bugs, please don't hesitate to directly open an issue about it.

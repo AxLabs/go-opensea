@@ -47,3 +47,18 @@ X-API-KEY: {{OPENSEA_API_TOKEN}}
 
 ###
 
+# curl --request GET
+#     --url https://api.opensea.io/api/v1/collection/doodles-official
+GET https://api.opensea.io/api/v1/collection/superrare/stats
+X-API-KEY: {{OPENSEA_API_TOKEN}}
+
+###
+
+# curl --request GET
+#     --url 'https://api.opensea.io/api/v1/assets?token_ids=1&order_direction=desc&offset=0&limit=20'
+#     --header 'X-API-KEY: XXXXXX'
+GET https://api.opensea.io/api/v1/assets?order_direction=asc&offset=0&limit=20&collection=cryptopunks&token_ids=0
+X-API-KEY: {{OPENSEA_API_TOKEN}}
+
+###
+
