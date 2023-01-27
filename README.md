@@ -13,17 +13,20 @@ go get github.com/AxLabs/go-opensea
 Instantiate an Opensea instance and then call one of its provided methods to interact with the Opensea API.
 
 ```go
-func getAssetContract() {
-o, err := NewOpensea(os.Getenv("API_KEY"))
+// Create the OpenSea Client
+opensea, err := NewOpensea(os.Getenv("API_KEY"))
 if err != nil {
-panic("could not instantiate Opensea client")
+	panic("could not instantiate Opensea instance")
 }
-singleContract, err := o.GetSingleContract("0xdceaf1652a131f32a821468dc03a92df0edd86ea")
+// Get the NFT contract of, e.g., "CryptoKitties"
+cryptoKittiesContract, err := opensea.GetSingleContract("0x06012c8cf97bead5deae237070f9587f8e7a266d")
 if err != nil {
-panic("could not get asset contract")
+  panic("could not get contract")
 }
-fmt.Println(singleContract)
-}
+fmt.Println("Contract name: " + cryptoKittiesContract.Name)
+fmt.Println("Schema Name:   " + cryptoKittiesContract.SchemaName)
+fmt.Println("External URL:  " + cryptoKittiesContract.Collection.ExternalUrl)
+fmt.Println("Discord URL:   " + cryptoKittiesContract.Collection.DiscordUrl)
 ```
 
 ## API Support
@@ -31,13 +34,12 @@ fmt.Println(singleContract)
 This SDK supports the following endpoints:
 
 - 🛠 Retrieve Assets ([/api/v1/assets](https://docs.opensea.io/reference/getting-assets))
-- ✅ Retrieve an
-  Asset ([/api/v1/asset_contract/{asset_contract_address}](https://docs.opensea.io/reference/retrieving-a-single-contract))
+- ✅ Retrieve an Asset ([/api/v1/asset_contract/{asset_contract_address}](https://docs.opensea.io/reference/retrieving-a-single-contract))
 - 🛠 Validate an Asset ([/api/v1/asset/{asset_contract_address}/{token_id}/validate](https://docs.opensea.io/reference/validate-assets))
 - 🛠 Retrieve Events ([/api/v1/events](https://docs.opensea.io/reference/retrieving-asset-events))
 - 🛠 Retrieve Collections ([/api/v1/collections](https://docs.opensea.io/reference/retrieving-collections))
 - 🛠 Retrieve Bundles ([/api/v1/bundles](https://docs.opensea.io/reference/retrieving-bundles))
-- 🛠 Retrieve a Contract ([/api/v1/asset/{asset_contract_address}/{token_id}](https://docs.opensea.io/reference/retrieving-a-single-asset))
+- ✅ Retrieve a Contract ([/api/v1/asset/{asset_contract_address}/{token_id}](https://docs.opensea.io/reference/retrieving-a-single-asset))
 - 🛠 Retrieve a Collection ([/api/v1/collection/{collection_slug}](https://docs.opensea.io/reference/retrieving-a-single-collection))
 - 🛠 Retrieve Collection Stats ([/api/v1/collection/{collection_slug}/stats](https://docs.opensea.io/reference/retrieving-collection-stats))
 - 🛠 Retrieve Owners ([/api/v1/asset/{asset_contract_address}/{token_id}/{owners}](https://docs.opensea.io/reference/retrieve-owners))
@@ -49,7 +51,7 @@ features. Take a look at the existing issues in this repository that specify som
 
 ## Roadmap (timeline tbd)
 
-#### Support APIs
+#### Support APIs including its Query options
 
 - [ ] Add support for `/assets`
 - [ ] Add support for `/asset_contract/{asset_contract_address}`
@@ -57,7 +59,7 @@ features. Take a look at the existing issues in this repository that specify som
 - [ ] Add support for `/events`
 - [ ] Add support for `/collections`
 - [ ] Add support for `/bundles`
-- [ ] Add support for `/asset/{asset_contract_address}/{token_id}`
+- [x] Add support for `/asset/{asset_contract_address}/{token_id}`
 - [ ] Add support for `/collection/{collection_slug}`
 - [ ] Add support for `/collection/{collection_slug}/stats`
 - [ ] Add support for `/asset/{asset_contract_address}/{token_id}/{owners}`
@@ -69,14 +71,14 @@ features. Take a look at the existing issues in this repository that specify som
 
 ## Acknowledgement
 
-This library was reworked from https://github.com/rmanzoku/go-opensea at 
+This library was reworked from https://github.com/rmanzoku/go-opensea at
 [this commit](https://github.com/rmanzoku/go-opensea/tree/e0722c7d22bbe26cbf222b9503552d05b44af289). Thanks for it! :tada:
 
 ## Sponsoring
 
 Financial support is highly appreciated!
 
-If you like what we've built please consider [sponsoring us](https://github.com/sponsors/AxLabs) via GitHub. 
+If you like what we've built please consider [sponsoring us](https://github.com/sponsors/AxLabs) via GitHub.
 
 ## Contact
 
