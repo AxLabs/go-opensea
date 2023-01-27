@@ -13,7 +13,12 @@ import (
 
 var (
 	mainnetAPI = "https://api.opensea.io"
+	testnetAPI = "https://testnets-api.opensea.io"
 	rinkebyAPI = "https://rinkeby-api.opensea.io"
+
+	basePath               = "/api/v1"
+	singleContractEndpoint = basePath + "/asset_contract"
+	singleAssetEndpoint    = basePath + "/asset"
 )
 
 type Opensea struct {
@@ -71,7 +76,7 @@ func (o Opensea) GetSingleAsset(assetContractAddress string, tokenID *big.Int) (
 }
 
 func (o Opensea) GetSingleAssetWithContext(ctx context.Context, assetContractAddress string, tokenID *big.Int) (*Asset, error) {
-	path := fmt.Sprintf("/api/v1/asset/%s/%s", assetContractAddress, tokenID.String())
+	path := fmt.Sprintf("%s/%s/%s", singleAssetEndpoint, assetContractAddress, tokenID.String())
 	b, err := o.GetPath(ctx, path)
 	if err != nil {
 		return nil, err

@@ -3,6 +3,7 @@ package opensea
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 )
 
 type Contract struct {
@@ -37,7 +38,7 @@ func (o Opensea) GetSingleContract(assetContractAddress string) (*Contract, erro
 }
 
 func (o Opensea) GetSingleContractWithContext(ctx context.Context, assetContractAddress string) (contract *Contract, err error) {
-	path := "/api/v1/asset_contract/" + assetContractAddress
+	path := fmt.Sprintf("%s/%s", singleContractEndpoint, assetContractAddress)
 	b, err := o.GetPath(ctx, path)
 	if err != nil {
 		return nil, err
